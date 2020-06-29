@@ -1,0 +1,6 @@
+List of Micro Services :-
+. Authentication
+. Tickets // Selling Tickets
+. Orders // Creation and Editing
+. Expiration // Orders Monitoring and Expiration
+. Payment // Credit Card Payments

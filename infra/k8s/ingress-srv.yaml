@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata: 
+    name: ingress-service 
+    ## this tells ingress to pick up the routing rules mentioned in this config
+    annotations: 
+        kubernetes.io/ingress.class: nginx 
+        ## tells ingress to check for regex in the config file
+        nginx.ingress.kubernetes.io/use-regex: 'true'
+spec: 
+    ## our custom routing rules  
+    rules: 
+        - host: ticketing.dev 
+          http: 
+            paths:
+                - path: /api/users/?(.*) 
+                  backend: 
+                    ## route this request to auth service 
+                    serviceName: auth-srv 
+                    servicePort: 3000
