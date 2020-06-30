@@ -6,10 +6,21 @@
  */
 
 export class DatabaseConnectionError extends Error {
+    statusCode = 500;
     reason = 'Error connecting to database';
     constructor() {
         super();
         Object.setPrototypeOf(this, DatabaseConnectionError.prototype);
+    }
+    // we are adding this method to structure the error in 
+    // a standard form so that it can be used by the error 
+    // handling middleware to send it to the client 
+    serializeErrors() {
+        return [
+            {
+                message: this.reason
+            }
+        ]
     }
 };
 

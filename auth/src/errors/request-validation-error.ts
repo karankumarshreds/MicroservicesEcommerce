@@ -15,6 +15,7 @@ import { ValidationError } from 'express-validator';
 
 // Custom extended class 
 export class RequestValidationError extends Error {
+    statusCode = 400;
     // object of type ValidationError shown above 
     public errors: ValidationError[];
     // we can use this subErrorClass now with a custom message
@@ -28,6 +29,11 @@ export class RequestValidationError extends Error {
         this.errors = errors;
         // Only because we are extending built in class 
         Object.setPrototypeOf(this, RequestValidationError.prototype);
+    };
+    serializeErrors() {
+        return this.errors.map(err => {
+            return { message: err.msg, field: err.param }
+        });
     };
 };
 
