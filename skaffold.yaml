@@ -5,10 +5,16 @@ deploy:
         manifests: 
             - ./infra/k8s/* 
 build: 
-    local: 
-        push: false 
+    # local: 
+    #     push: false 
+    ## Telling skaffold to use google build to build image 
+    ## instead of the local machine      
+    googleCloudBuild: 
+      projectId: ticketing-dev-281911
     artifacts: 
-        - image: karanshreds/auth
+        ## specify the name which google build will give 
+        ## to the image built ## us.gcr.io/ticketing-dev-281911/<projectId>/<name_of_directory>
+        - image: gcr.io/ticketing-dev-281911/auth
           context: auth 
           docker: 
             dockerfile: Dockerfile 
