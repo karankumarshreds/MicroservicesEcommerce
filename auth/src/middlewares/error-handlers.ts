@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { RequestValidationError } from '../errors/request-validation-error';
-import { DatabaseConnectionError } from '../errors/database-connection-error';
+import { CustomError } from '../errors/custom-error';
 
 /**********************************************************************
  * This middleware handles all the requests and structures them in 
@@ -13,18 +12,12 @@ export const errorHandler = (
     res: Response,
     next: NextFunction
 ) => {
-    // err is the instance of RequestValidationError || DatabaseConnectionError
-    if (err instanceof RequestValidationError) {
+    // err is the instance of RequestValidationError(subclass of CustomError)
+    // err is the instance of DatabaseConnectionError(subclass of CustomError)
+    if (err instanceof CustomError) {
         // serializeErrors is a method in RequestValidationError class that 
         // returns error in the standard error format
         return res.status(err.statusCode).send({ errors: err.serializeErrors() });
-    };
-    if (err instanceof DatabaseConnectionError) {
-        return res.status(err.statusCode).send({
-            errors: [
-                err.serializeErrors()
-            ]
-        });
     };
     // err is an error string coming from all the routes
     res.status(400).send({

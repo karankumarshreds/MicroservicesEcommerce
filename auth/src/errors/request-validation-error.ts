@@ -12,9 +12,14 @@
  */
 // importing this just to use it as a type
 import { ValidationError } from 'express-validator';
+import { CustomError } from './custom-error';
+//using CustomError(abstract clss) as an interface so that 
+// we do not make any mistake and follow the exact structure
+// required. For this instance, it needs to have statusCode 
+// and it needs to have a method of serializeErrors as well
 
 // Custom extended class 
-export class RequestValidationError extends Error {
+export class RequestValidationError extends CustomError {
     statusCode = 400;
     // object of type ValidationError shown above 
     public errors: ValidationError[];
@@ -25,11 +30,13 @@ export class RequestValidationError extends Error {
     // an array which we want to send to eventual error handler middleware,
     // this constructor will accept the array of that particular type 
     constructor(errors: ValidationError[]) {
-        super();
+        super('Validation Error'); // passing a string for logging purposes
         this.errors = errors;
         // Only because we are extending built in class 
         Object.setPrototypeOf(this, RequestValidationError.prototype);
     };
+    // method to serialize the incoming errors to a standard form of 
+    // error as { errors: [ {message: string, field?: string} ] }
     serializeErrors() {
         return this.errors.map(err => {
             return { message: err.msg, field: err.param }
