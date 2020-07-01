@@ -27,10 +27,10 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     password: {
-        required: true,
+        type: String,
+        required: true
     }
 });
-
 // mongoose doesn't let TS handle inference and so we will fix that manually 
 // by using the interface we wrote above and using the below function to create
 // a new user rather than instantiating 'new User' directly
@@ -54,3 +54,5 @@ export { User };
  * by using <> brackets. These are optional. These take in arguments
  * that specify the types.
  */
+
+let random;
