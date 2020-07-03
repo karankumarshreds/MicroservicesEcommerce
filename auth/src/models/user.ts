@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import { Password } from '../services/password';
 // An interface that describes the properties 
 // that are required to pass to create a new User 
 interface UserAttrs {
@@ -31,10 +31,21 @@ const userSchema = new mongoose.Schema({
         required: true
     }
 });
+// pre if a middleware function. Used to run a function before
+// doing an action on the db, in our case 'save' 
+userSchema.pre('save', async function (done) {
+    // if the password is newlycreated or is modified
+    // then only will we hash the password.
+    if (this.isModified('password')) {
+        const hashed = await Password.toHash(this.get('password'));
+        this.set('password', hashed);
+    };
+    done();
+});
+
 // mongoose doesn't let TS handle inference and so we will fix that manually 
 // by using the interface we wrote above and using the below function to create
 // a new user rather than instantiating 'new User' directly
-
 // we will add this as a method to the User model like : 
 // This much only is required in JS but not in TS 
 userSchema.statics.build = (attrs: UserAttrs) => {
@@ -48,11 +59,9 @@ const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
 
 export { User };
 
-/*********************************************************************
+/********************************************************************
  * < brackets > ? GENERICS in TS
  * In TS, the we can pass in Generic Types (types that they can have)
  * by using <> brackets. These are optional. These take in arguments
  * that specify the types.
- */
-
-let random;
+ ********************************************************************/
