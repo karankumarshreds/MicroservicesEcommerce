@@ -30,6 +30,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+}, { // Customization of how the objects will be saved as JSON 
+    // Goal is to change _id to id and not 'return' password once saved
+    toJSON: {
+        transform(doc, ret) {
+            ret.id = ret._id; // Changing _id to id 
+            delete ret._id;
+            delete ret.password;
+            delete ret.__v;
+        }
+    }
 });
 // pre if a middleware function. Used to run a function before
 // doing an action on the db, in our case 'save' 
