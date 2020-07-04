@@ -18,3 +18,7 @@ spec:
                     ## route this request to auth service 
                     serviceName: auth-srv 
                     servicePort: 3000
+                - path: /?(.*) ## always list out this regex in the last
+                  backend: 
+                    serviceName: client-srv
+                    servicePort: 3000 

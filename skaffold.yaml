@@ -15,10 +15,18 @@ build:
         ## specify the name which google build will give 
         ## to the image built ## us.gcr.io/ticketing-dev-281911/<projectId>/<name_of_directory>
         - image: gcr.io/ticketing-dev-281911/auth
-          context: auth 
+          context: auth ## folder where the dockerfile is 
           docker: 
-            dockerfile: Dockerfile 
+            dockerfile: Dockerfile ## name of dockerfile 
           sync: 
             manual: 
                 - src: 'src/**/*.ts'
                   dest: . 
+        - image: gcr.io/ticketing-dev-281911/client 
+          context: client 
+          docker: 
+            dockerfile: Dockerfile 
+          sync: 
+            manual: 
+              - src: '**/*.js'
+                dest: . 
