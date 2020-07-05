@@ -5,7 +5,9 @@
 > npm run dev 
 
 # dependencies
-npm install react react-dom next
+> npm install react react-dom next
+> npm install bootstrap
+> npm install axios
 
 # pages 
 Whenever the nextjs server starts up, it reads all the pages &
