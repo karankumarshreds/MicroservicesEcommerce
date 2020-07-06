@@ -19,7 +19,7 @@
   kubectl get namespace
   ```
   *BUT the ingress-nginx runs in a separate 'ingress-nginx namespace'*. 
-  ![alt info](../notes_images/namespace1.png)
+  ![image info](../notes_images/namespace1.png)
   Therefore, below point might be a challenge: 
 
 * We could rather reach out to ingress-nginx with the path
