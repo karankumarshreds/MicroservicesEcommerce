@@ -20,7 +20,7 @@
   ```
   *BUT the ingress-nginx runs in a separate 'ingress-nginx namespace'*. 
   <!-- ![image info](./notes_images/namespace1.PNG =600px) -->
-  <img src="./notes_images/namespace1.PNG" width="600"/>
+  <img src="../notes_images/namespace1.PNG" width="600"/>
   Therefore, below point might be a challenge: 
 
 * We could rather reach out to ingress-nginx with the path
