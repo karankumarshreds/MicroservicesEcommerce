@@ -1,4 +1,4 @@
-import axios from 'axios';
+import buildClient from '../api/buildClient';
 
 const LandingPage = ({ currentUser }) => {
     console.log(currentUser);
@@ -8,34 +8,29 @@ const LandingPage = ({ currentUser }) => {
         </div>
     );
 };
-
-LandingPage.getInitialProps = async () => {
-    /*****************************************************************
-     * This axios call is being called "internally" unlike when
-     * requested via 'Components' which calls axios "externally"
-     * via browser.
-     * For << axios.get('/api/users/currentuser') >>
-     * the Node's http network would assume that you're  trying 
-     * to make request to "localhost:80/api/users/currentuser".
-     * Here, localhost would mean client's pod & not the auth's pod.
-     * Hence, we need to make request to auth-srv instead!
-     * ***************************************************************
-     * SOLUTION? 
-     * 1.) We could either use 'http://auth-srv/api/users/currentuser'
-     * This would work but it could get complicated very quickly and 
-     * we would have to remember srv-names for ALL the services!
-     * 2.) We could rather reach out to ingress-nginx with the path
-     * of '/api/users/currentuser and let ingress-nginx figure out 
-     * to which service in our cluster this request would belong to
-     * ***************************************************************
-     * NOTE : 
-     * >> We need to figure out a way to get to the domain on which 
-     * the ingress-nginx is listening for 
-     * >> We also need to figure out a way to send along the cookies 
-     * to all these internal follow up requests !
-     ******************************************************************/
-    const response = await axios.get('/api/users/currentuser');
-    return response.data;
+/***************************************************************************
+ getInitialProps() runs on server : 
+ > on hard refresh
+ > if addres bar is re-entered
+ > if domain is changed 
+ So we are okay to make the request internally to the ingress-nginx
+ to reach out to auth service!
+ BUT, getInitialProps() gets rendered in the browser when the user navigates 
+ from within the website!!!!! This means we can't make the internal 
+ req (because this is run in the browser), so it needs to be an external 
+ request to the domain!!!!! How will we fix this !? 
+ ****************************************************************************
+ * Solution : We will write a code that will check if the code is being
+ * run from the browser or the server and will make the req accordingly.
+ *****************************************************************************/
+LandingPage.getInitialProps = async (context) => {
+    /**********************
+     * READ readme file!
+     * ********************/
+    // instance of buildClient (re-configured-axios-function)
+    const client = buildClient(context);
+    const { data } = await client.get('/api/users/currentuser');
+    return data;
 }
 
 export default LandingPage;
