@@ -1,0 +1,2 @@
+##### NOTE: 
+You can direct the user's browser to delete the cookie by setting the cookie's expiration date to a past date. The next time a user makes a request to a page within the domain or path that set the cookie, the browser will determine that the cookie has expired and remove it.

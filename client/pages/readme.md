@@ -1,3 +1,8 @@
+#### NOTE : 
+When you tie getInitialPRops() to _app Component, the getInitialProps() tied to 
+other page components do not get invoked automatically.
+#### This issue be solved by *invoking* the getInitialProps() of page components from the _app component's getInitialProps(). _app Component's getInitialProps(appContext) - *appContext object* has information about the page components getIntialProps() as well.
+
 ### How the Next JS will authenticate request?
 * Inspect URL of incoming request. 
   Determine set of components to show depending on auth state.
@@ -11,8 +16,7 @@
 
 ### How to communicate amongst services internally?
 * We could either use 'http://auth-srv/api/users/currentuser'
-  This would work but it could get complicated very quickly and 
-  we would have to remember srv-names for ALL the services!
+  This would work but:
   ##### note : 
   This rule only works if the services are in the same namespace.
   ```
