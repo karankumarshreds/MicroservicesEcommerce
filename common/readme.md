@@ -43,3 +43,14 @@ Therefore, package.json:
   ],
 ```
 
+Further, if you make any changes to the source code and want to patch it as a new version, you can either manually change the version number in the package.json file or simply: 
+##### note: *make sure you commit your changes to git first*
+```linux
+npm version patch
+```
+*This won't publish it! In order to do so*:
+```linux
+npm run build 
+npm publish
+```
+
