@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import { app } from '../app';
+// import { app } from '../app';
 
 /************************************************************
  * MongoMemoryServer is going to run an instance of mongodb
