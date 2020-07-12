@@ -1,3 +1,14 @@
+/***************************************************************************
+ * This function is used to extract the user data from the incoming request. 
+ * This checks if the JWT is valid? it calls next function by adding the 
+ * user's payload(email, ID : whatever was signed with JWT by us) to the req
+ * as 'currentUser' and we can further act accordingly.
+ * Follow up middleware 'requireAuth' takes care of throwing an error. It 
+ * extracts the 'currentUser' property and if it doesn't exist, it throws
+ * an error(our custom error with 401 status)
+ ****************************************************************************/
+
+
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -25,6 +36,7 @@ export const currentUser = (
         return next();
     };
     try {
+        // returns email and id if valid
         const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!) as UserPayload;
         /** 
          * In normal JS we would have simply added a property to req and 

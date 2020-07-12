@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-// import { app } from '../app';
+import request from 'supertest';
+import { app } from '../app';
 
 /************************************************************
  * MongoMemoryServer is going to run an instance of mongodb
@@ -37,3 +38,27 @@ afterAll(async () => {
     await mongo.stop();
     await mongoose.connection.close();
 });
+
+
+// refactoring global to accept custom function to be used by all the tests
+declare global {
+    namespace NodeJS {
+        interface Global {
+            signin(): Promise<string[]>
+        }
+    }
+};
+
+global.signin = async () => {
+    const email = 'test@test.com';
+    const password = 'password';
+    const response = await request(app)
+        .post('/api/users/signup')
+        .send({
+            email,
+            password
+        })
+        .expect(201);
+    const cookie = response.get('Set-Cookie');
+    return cookie;
+};

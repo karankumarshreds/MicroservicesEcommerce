@@ -3,7 +3,7 @@ import 'express-async-errors';
 import cookieSession from 'cookie-session';
 import { json } from 'body-parser';
 import { errorHandler, NotFoundError } from '@karantickets/common';
-
+import { createTicketRouter } from './routes/new';
 
 
 const app = express();
@@ -18,6 +18,9 @@ app.use(cookieSession({
     // only share cookies over https (unless in test environment)
     secure: process.env.NODE_ENV != 'test' ? true : false
 }));
+
+// routes
+app.use(createTicketRouter);
 
 // recieve unfiltered requests to throw custom NotFoundError
 app.all('*', async () => {

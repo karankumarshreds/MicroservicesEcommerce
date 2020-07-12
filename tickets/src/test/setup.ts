@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-// import { app } from '../app';
+import request from 'supertest';
+import { app } from '../app';
 
 /************************************************************
  * MongoMemoryServer is going to run an instance of mongodb
@@ -37,3 +38,43 @@ afterAll(async () => {
     await mongo.stop();
     await mongoose.connection.close();
 });
+
+// refactoring global to accept custom function to be used by all the tests
+declare global {
+    namespace NodeJS {
+        interface Global {
+            signin(): string[];
+        }
+    }
+};
+/** Since we cannot have access of auth service, we will make custom cookies 
+ * Basically we are replicating the flow of signing in.
+ */
+import jwt from 'jsonwebtoken';
+
+global.signin = () => {
+    // build a JWT payload { id, email }
+    const payload = {
+        id: '12345678',
+        email: 'test@test.com'
+    };
+
+    // create JWT 
+    const token = jwt.sign(payload, process.env.JWT_KEY!); // key defined above in beforeAll()
+
+    // build session object { jwt: MY_JWT }
+    const session = { jwt: token };
+
+    // turn that session into JSON 
+    const sessionJSON = JSON.stringify(session);
+
+    // take json and encode it as base64
+    // this gets saved in the browser with key of express:sess
+    const base64 = Buffer.from(sessionJSON).toString('base64');
+
+    // return a string that with key as express:sess
+    // (bcs that's what the browser does after user is signed in)
+    return [`express:sess=${base64}`];
+};
+
+// ,{"jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMGI3M2RhMDBkNzEzMDAyY2E4YjYzNCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTU5NDU4NjA3NH0.dSOK6YjnlZcnTO0bUlNongI2vToXlS_lxA3XvN9b4fM"}
