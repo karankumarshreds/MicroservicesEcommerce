@@ -1,0 +1,42 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+    name: tickets-depl 
+spec: 
+    replicas: 1 
+    selector: 
+        matchLabels:
+            app: tickets
+    template: 
+        metadata: 
+            labels: 
+                app: tickets 
+        spec: 
+            containers: 
+                - name: tickets 
+                  image: gcr.io/ticketing-dev-281911/tickets
+                  env: 
+                    - name: MONGO_URI
+                      ## mongodb will automatically create a DB for us named 'tickets'
+                      value: 'mongodb://tickets-mongo-srv:27017/tickets'
+                    - name: JWT_KEY
+                      valueFrom: 
+                        secretKeyRef: 
+                            ## name of the secret we created imperatively
+                            name: jwt-secret 
+                            key: JWT_KEY
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+    name: tickets-srv 
+spec: 
+    type: ClusterIP
+    selector: 
+        app: tickets 
+    ports: 
+        - name: tickets 
+          protocol: TCP 
+          port: 3000 
+          targetPort: 3000 
+    

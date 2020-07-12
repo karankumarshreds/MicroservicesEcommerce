@@ -10,7 +10,7 @@ import { errorHandler, NotFoundError } from '@karantickets/common';
 
 
 const app = express();
-// to make sure that it allows/trust traffic 
+// to make sure that it allows/trusts traffic 
 // coming from the proxy : ingrex-nginx
 app.set('trust proxy', true);
 app.use(json());
@@ -23,7 +23,7 @@ app.use(cookieSession({
     // so it should be true for https (set it manually)
     secure: process.env.NODE_ENV !== 'test' ? true : false
 }));
-
+// routes 
 app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
