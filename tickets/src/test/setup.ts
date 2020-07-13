@@ -76,5 +76,3 @@ global.signin = () => {
     // (bcs that's what the browser does after user is signed in)
     return [`express:sess=${base64}`];
 };
-
-// ,{"jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMGI3M2RhMDBkNzEzMDAyY2E4YjYzNCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTU5NDU4NjA3NH0.dSOK6YjnlZcnTO0bUlNongI2vToXlS_lxA3XvN9b4fM"}

@@ -6,8 +6,8 @@ interface UserAttrs {
     email: string;
     password: string;
 };
-
-// An interface that tells User model that it will 
+// ## 1
+// An interface that tells User model that it will use &
 // contain a build function that we created for it (only needed in TS)
 interface UserModel extends mongoose.Model<UserDoc> {
     // telling it should have a method build 
@@ -15,7 +15,7 @@ interface UserModel extends mongoose.Model<UserDoc> {
 };
 
 // An interface that describe the properties a single 
-// use has/can have 
+// user has/can have 
 interface UserDoc extends mongoose.Document {
     email: 'string';
     password: 'string';
@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
     }
 });
 // pre if a middleware function. Used to run a function before
-// doing an action on the db, in our case 'save' 
+// doing an action on the db, in our case before 'save' 
 userSchema.pre('save', async function (done) {
     // if the password is newlycreated or is modified
     // then only will we hash the password.
@@ -61,7 +61,7 @@ userSchema.pre('save', async function (done) {
 userSchema.statics.build = (attrs: UserAttrs) => {
     return new User(attrs);
 };
-// Telling User model about our custom UserModel interface 
+// Telling User model about our custom UserModel(#1) interface 
 // Only required in TS 
 // 1st argument tells what all attributes can a User model have 
 // 2nd argument tells, that User model will return something of type 'UserModel'

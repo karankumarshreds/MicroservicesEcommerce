@@ -20,6 +20,11 @@ export const errorHandler = (
         return res.status(err.statusCode).send({ errors: err.serializeErrors() });
     };
     // err is an error string coming from all the routes
+    // if something else goes wrong and the error is not taken care
+    // by any of the custom error classes
+    // So we might need to check what is that case that we might have missed
+    // which is giving us this err
+    console.error(err);
     res.status(400).send({
         errors: [{ message: 'Something went wrong' }]
     });

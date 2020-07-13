@@ -3,7 +3,9 @@ import 'express-async-errors';
 import cookieSession from 'cookie-session';
 import { json } from 'body-parser';
 import { errorHandler, NotFoundError } from '@karantickets/common';
+
 import { createTicketRouter } from './routes/new';
+import { showTicketRouter } from './routes/show';
 
 
 const app = express();
@@ -21,6 +23,7 @@ app.use(cookieSession({
 
 // routes
 app.use(createTicketRouter);
+app.use(showTicketRouter);
 
 // recieve unfiltered requests to throw custom NotFoundError
 app.all('*', async () => {
