@@ -3,10 +3,10 @@ import { app } from '../../app';
 
 
 it(('returns 404 if ticket not found'), async () => {
-    const response = await request(app)
-        .get('/api/tickets/XXX')
+    await request(app)
+        .get('/api/tickets/5f0ca5d74adb86337099434c')
         .send()
-    // .expect(404);
+        .expect(404);
 });
 
 it(('returns ticket if ticket is found'), async () => {
