@@ -1,7 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import request from 'supertest';
-import { app } from '../app';
+
 
 /************************************************************
  * MongoMemoryServer is going to run an instance of mongodb
@@ -54,8 +53,9 @@ import jwt from 'jsonwebtoken';
 
 global.signin = () => {
     // build a JWT payload { id, email }
+    // we need some new random ID
     const payload = {
-        id: '12345678',
+        id: new mongoose.Types.ObjectId().toHexString(),
         email: 'test@test.com'
     };
 
