@@ -20,9 +20,9 @@ spec:
                   args: [
                     '--port', '4222',
                     '--http_port', '8222',
-                    '--hb_interval', '5s',
-                    '--hb_timeout', '5s',
-                    '--hb_fail_count', '2',
+                    '--hb_interval', '5s',      ## heart beat : healthcheck every 5 seconds 
+                    '--hb_timeout', '5s',       ## how long it will wait for response from client 
+                    '--hb_fail_count', '2',     ## how many fail request before considering it to be down
                     '--stan_debug', 
                     '--cluster_id', 'ticketing'
                   ]
