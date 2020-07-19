@@ -1,11 +1,12 @@
 import nats from 'node-nats-streaming';
 import { TicketCreatedPublisher } from './events/ticket-created-publisher';
-import { Subjects } from './events/subjects';
 
 console.clear();
 
 // we will first create a client that will connect 
-// with the NAT server and exchange information 
+// with the NAT server and exchange information
+// #1 cluster ID 
+// #2 client ID  
 const stan = nats.connect('ticketing', 'abc', {
     url: 'http://localhost:4222'
 });
