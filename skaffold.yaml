@@ -38,3 +38,12 @@ build:
             manual:
               - src: '**/*.ts'
                 dest: .
+        - image: gcr.io/ticketing-dev-281911/orders 
+          context: orders 
+          docker: 
+            dockerfile: Dockerfile
+          sync: 
+            manual:
+              - src: '**/*.ts'
+                dest: .        
+        

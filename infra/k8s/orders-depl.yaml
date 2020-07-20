@@ -1,0 +1,51 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+    name: orders-depl 
+spec: 
+    replicas: 1 
+    selector: 
+        matchLabels:
+            app: orders
+    template: 
+        metadata: 
+            labels: 
+                app: orders 
+        spec: 
+            containers: 
+                - name: orders 
+                  image: gcr.io/ticketing-dev-281911/orders
+                  env: 
+                    - name: NATS_CLIENT_ID
+                      ##  use same name as the running pod 
+                      valueFrom: 
+                        fieldRef: 
+                            fieldPath: metadata.name
+                    - name: NATS_URL
+                      value: 'http://nats-srv:4222'
+                    - name: NATS_CLUSTER_ID
+                      value: ticketing
+                    - name: MONGO_URI
+                      ## mongodb will automatically create a DB for us named 'orders'
+                      value: 'mongodb://orders-mongo-srv:27017/orders'
+                    - name: JWT_KEY
+                      valueFrom: 
+                        secretKeyRef: 
+                            ## name of the secret we created imperatively
+                            name: jwt-secret 
+                            key: JWT_KEY
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+    name: orders-srv 
+spec: 
+    type: ClusterIP
+    selector: 
+        app: orders 
+    ports: 
+        - name: orders 
+          protocol: TCP 
+          port: 3000 
+          targetPort: 3000 
+    

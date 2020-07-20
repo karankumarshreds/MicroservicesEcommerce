@@ -23,6 +23,11 @@ spec:
                     ## route this request to tickets service 
                     serviceName: tickets-srv
                     servicePort: 3000
+                - path: /api/orders/?(.*)
+                  backend: 
+                    ## route this request to tickets service 
+                    serviceName: orders-srv
+                    servicePort: 3000
                 - path: /?(.*) ## always list out this regex in the last
                   backend: 
                     serviceName: client-srv
