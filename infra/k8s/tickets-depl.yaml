@@ -16,6 +16,15 @@ spec:
                 - name: tickets 
                   image: gcr.io/ticketing-dev-281911/tickets
                   env: 
+                    - name: NATS_CLIENT_ID
+                      ##  use same name as the running pod 
+                      valueFrom: 
+                        fieldRef: 
+                            fieldPath: metadata.name
+                    - name: NATS_URL
+                      value: 'http://nats-srv:4222'
+                    - name: NATS_CLUSTER_ID
+                      value: ticketing
                     - name: MONGO_URI
                       ## mongodb will automatically create a DB for us named 'tickets'
                       value: 'mongodb://tickets-mongo-srv:27017/tickets'

@@ -1,6 +1,8 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-
+// to make use of the mock file 
+// this will make nats-wrapper make use of this mock file instead of the real file
+jest.mock('../nats-wrapper');
 
 /************************************************************
  * MongoMemoryServer is going to run an instance of mongodb
@@ -25,6 +27,7 @@ beforeAll(async () => {
 beforeEach(async () => {
     // Delete all old tasks running in the mongodb instance 
     // so that it gets free for each tests 
+    jest.clearAllMocks();
     const collections = await mongoose.connection.db.collections();
     for (let collection of collections) {
         await collection.deleteMany({});

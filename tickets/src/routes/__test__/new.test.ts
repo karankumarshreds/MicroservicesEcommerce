@@ -2,6 +2,10 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
 
+// even though we are importing the real natsWrapper 
+// Jest will make sure to interrupt that and import the fake one instead 
+import { natsWrapper } from '../../nats-wrapper';
+
 it(('has post route handler at /api/tickets'), async () => {
     const response = await request(app)
         .post('/api/tickets')
@@ -68,4 +72,17 @@ it(('creates a ticket with valid inputs'), async () => {
         .expect(201)
     tickets = await Ticket.find({})
     expect(tickets.length).not.toEqual(0);
+});
+
+it('publlishes an event', async () => {
+    await request(app)
+        .post('/api/tickets')
+        .set('Cookie', global.signin())
+        .send({
+            title: 'title',
+            price: 20
+        })
+        .expect(201)
+    console.log(natsWrapper);
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

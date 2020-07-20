@@ -1,6 +1,9 @@
 import request from 'supertest';
 import { app } from '../../app';
-import { updateTicketRouter } from '../update';
+
+// even though we are importing the real natsWrapper 
+// Jest will make sure to interrupt that and import the fake one instead 
+import { natsWrapper } from '../../nats-wrapper';
 
 it(('returns 404 if provided ID does not exist'), async () => {
     await request(app)
@@ -72,7 +75,7 @@ it(('returns 400 if invalid price/title is provided'), async () => {
         .expect(400);
 });
 
-it(('All good info provided!'), async () => {
+it(('All good info provided for update!'), async () => {
     const cookie = global.signin();
     const response = await request(app)
         .post('/api/tickets')
@@ -90,4 +93,24 @@ it(('All good info provided!'), async () => {
         })
         .expect(200);
     expect(response.body.title).not.toEqual(updatedResponse.body.title)
+});
+
+it('publishes an event after update', async () => {
+    const cookie = global.signin();
+    const response = await request(app)
+        .post('/api/tickets')
+        .set('Cookie', cookie)
+        .send({
+            title: 'Title',
+            price: 500
+        })
+    await request(app)
+        .put(`/api/tickets/${response.body.id}`)
+        .set('Cookie', cookie)
+        .send({
+            title: 'Title 2',
+            price: 500
+        })
+        .expect(200);
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

@@ -35,5 +35,5 @@ class NatsWrapper {
         });
     };
 }
-
+// exporting an instance of this directly
 export const natsWrapper = new NatsWrapper();
