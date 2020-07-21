@@ -1,5 +1,7 @@
 export enum OrderStatus {
-    /** when the order has been created and the corresponding ticket is not reserved yet */
+    /** when the order has been created and the corresponding ticket is not reserved yet 
+     * in other words, the order for the ticket (ticket is available) is created (new.ts)
+    */
     Created = 'created',
     /** The corresponding ticket has already been reserved or user has cancelled the order 
      *  or if the order expires before payment
