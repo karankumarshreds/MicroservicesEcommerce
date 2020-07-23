@@ -1,10 +1,9 @@
 import express, { Request, Response } from 'express';
-
+import { Order } from '../models/order';
 import {
     currentUser,
     requireAuth,
     validateRequest,
-    NotAuthorizedError,
     BadRequestError
 } from '@karantickets/common';
 
@@ -14,7 +13,10 @@ router.get('/api/orders',
     currentUser,
     requireAuth,
     async (req: Request, res: Response) => {
-        res.send({});
+        const orders = await Order.find({
+            userId: req.currentUser!.id
+        }).populate('ticket') // get associated ticket as well
+        res.send(orders);
     });
 
 export { router as indexOrderRouter }
