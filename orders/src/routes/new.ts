@@ -11,6 +11,8 @@ import {
 const router = express.Router();
 import { Ticket } from '../models/ticket';
 import { Order } from '../models/order';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 
 
@@ -49,6 +51,24 @@ router.post('/api/orders',
         await order.save();
 
         // Publish an event saying that an order was created
+        new OrderCreatedPublisher(natsWrapper.client).publish({
+            id: order.id,
+            status: order.status,
+            userId: order.userId,
+            // we will not provide date object here to the expiresAt property as it 
+            // expects a string. We did that because all the events are shared as JSON
+            // hence strings. If we do not do that here, date object while turning itself
+            // into a string, which will be a string with time zone reflecting the TIMEZONE
+            // wherever it was made in. That is NOT what we want because whenever we share 
+            // the timestamps across different services we need to share time stamps in a 
+            // standard way and that is a UTC time stamp which will work regardless of what 
+            // TIMEZONE the service receiving this event is in. Use "toISOString()" for this.
+            expiresAt: order.expiresAt.toISOString(),
+            ticket: {
+                id: ticket.id,
+                price: ticket.price
+            }
+        })
 
         res.status(201).send(order);
     });

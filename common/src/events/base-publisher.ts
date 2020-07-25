@@ -19,7 +19,7 @@ export abstract class Publisher<T extends Event> {
                 console.log(`Event published w/ subject: ${this.subject}`);
                 resolve();
             });
-        })
-
+        });
     };
+
 };

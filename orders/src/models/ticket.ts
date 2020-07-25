@@ -3,6 +3,7 @@ import { OrderStatus } from '@karantickets/common';
 import { Order } from './order';
 
 interface TicketAttrs {
+    id: string;
     title: string;
     price: number;
 }
@@ -31,7 +32,16 @@ const ticketSchema = new mongoose.Schema({
 });
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-    return new Ticket(attrs);
+    return new Ticket({
+        _id: attrs.id,  // because when we recieve ticket from ticket service, it has ID as id
+        // but our mongoose DB considers ID to be a DB-ID if it is _id. We are doing this so that 
+        // our this DB does not generate a new ID for the recieved ticket and use the 'id' property
+        // to be the only ID of the ticket being recieved. Hence, while saving we need to change it 
+        // from "id" --> "_id" otherwise mongoose will think "id" (incoming) is some other property
+        // and give it an _id of it's own. Which we do not want at any cost.
+        title: attrs.title,
+        price: attrs.price
+    });
 }
 // Adding method to the document to find if the ticket is reserved or not 
 // Run query to look at all orders and find an order where
