@@ -9,6 +9,8 @@ export interface OrderCreatedEvent {
     subject: Subjects.OrderCreated;
     data: {
 
+        version: number;
+
         // default status of order whenever it is created 
         status: OrderStatus;
 

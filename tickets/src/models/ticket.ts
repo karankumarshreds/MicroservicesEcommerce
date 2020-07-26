@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+// used to active the versioning on our schema for concurrency
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 // ## 1
 // interface to describe the properties 
@@ -19,6 +21,7 @@ interface TicketDoc extends mongoose.Document {
     title: string;
     price: number;
     userId: string;
+    version: number; // because default mongoose.Document doesn't have 'version', it has '__v'
 };
 
 // ## 3
@@ -49,6 +52,12 @@ const ticketSchema = new mongoose.Schema({
         }
     }
 });
+
+// to change default key __v to 'version' while saving the ticket 
+// hence change the TicketDoc as well 
+ticketSchema.set('versionKey', 'version');
+// enabling the version for concurrency 
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 // Using interface ##1 while creation
 ticketSchema.statics.build = (attrs: TicketAttrs) => {

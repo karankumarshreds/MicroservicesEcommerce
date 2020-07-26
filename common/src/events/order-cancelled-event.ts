@@ -11,5 +11,6 @@ export interface OrderCancelledEvent {
 
         // payment service needs to know to not look for any payment for this order
         id: string;
+        version: number;
     }
 }
