@@ -28,7 +28,8 @@ router.post(('/api/tickets'),
             id: ticket.id,
             title: ticket.title,
             price: ticket.price,
-            userId: req.currentUser!.id
+            userId: req.currentUser!.id,
+            version: ticket.version
         });
         res.status(201).send(ticket);
     });

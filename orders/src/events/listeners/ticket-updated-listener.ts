@@ -9,14 +9,20 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     subject: Subjects.TicketUpdated = Subjects.TicketUpdated;
     queueGroupName = queueGroupName;
     async onMessage(data: TicketUpdatedEvent['data'], msg: Message) {
-        const { id, price, title } = data;
-        const ticket = await Ticket.findById(id);
+        const { id, price, title, version } = data;
+        // Lecture 368
+        const ticket = await Ticket.findOne({
+            _id: id,
+            version: version - 1
+        })
         if (!ticket) {
             throw new Error('Ticket not found');
         };
         ticket.set({
             title, price
         });
+        // saving will increment the version automatically. 
+        // We don't need to add version property in the above step 
         await ticket.save();
         msg.ack();
     };
