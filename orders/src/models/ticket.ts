@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { version } from 'mongoose';
 import { OrderStatus } from '@karantickets/common';
 import { Order } from './order';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
@@ -19,6 +19,8 @@ export interface TicketDoc extends mongoose.Document {
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
     build(attrs: TicketAttrs): TicketDoc;
+    // Lecture 370
+    findByEvent(event: { id: string, version: number }): Promise<TicketDoc | null>;
 }
 
 const ticketSchema = new mongoose.Schema({
@@ -47,6 +49,13 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
         title: attrs.title,
         price: attrs.price
     });
+}
+// Lecture 370
+ticketSchema.statics.findByEvent = (event: { id: string, version: number }) => {
+    return Ticket.findOne({
+        _id: event.id,
+        version: event.version
+    })
 }
 // Adding method to the document to find if the ticket is reserved or not 
 // Run query to look at all orders and find an order where
