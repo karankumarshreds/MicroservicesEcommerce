@@ -4,13 +4,16 @@ import { Ticket } from '../../models/ticket';
 import { Order } from '../../models/order';
 import { OrderStatus } from '@karantickets/common';
 import { natsWrapper } from '../../nats-wrapper';
+import mongoose from 'mongoose';
+
 
 it('marks an order as cancelled', async () => {
 
     // create a ticket 
     const ticket = await Ticket.build({
         title: 'concert',
-        price: 500
+        price: 500,
+        id: mongoose.Types.ObjectId().toHexString()
     });
     await ticket.save();
     const user = global.signin();
@@ -38,7 +41,8 @@ it('emits a order cancel event', async () => {
     // create a ticket 
     const ticket = await Ticket.build({
         title: 'concert',
-        price: 500
+        price: 500,
+        id: mongoose.Types.ObjectId().toHexString()
     });
     await ticket.save();
     const user = global.signin();

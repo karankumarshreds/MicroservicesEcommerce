@@ -47,3 +47,26 @@ it('finds, updates, and saves a ticket', async () => {
     expect(updatedTicket!.price).toEqual(data.price);
     expect(updatedTicket!.version).toEqual(data.version);
 });
+
+it('acks the message', async () => {
+    const { msg, data, ticket, listener } = await setup();
+
+    await listener.onMessage(data, msg);
+    expect(msg.ack).toHaveBeenCalled();
+});
+
+it('it does not invoke ack if version number is skipped', async () => {
+    const { msg, ticket, listener } = await setup();
+    const data: TicketUpdatedEvent['data'] = {
+        id: ticket.id,
+        title: 'concert updated',
+        price: 700,
+        userId: 'sdkjhsd',
+        version: ticket.version + 3
+    }
+    try {
+        await listener.onMessage(data, msg);
+    } catch (err) { }
+
+    expect(msg.ack).not.toHaveBeenCalled();
+});

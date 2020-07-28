@@ -13,6 +13,8 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
         // Lecture 368
         const ticket = await Ticket.findByEvent({ id, version });
         if (!ticket) {
+            // makes sure the ack funtion is not called and the funtion ends early
+            // so that the NAT server will again send the event after 5 seconds 
             throw new Error('Ticket not found');
         };
         ticket.set({

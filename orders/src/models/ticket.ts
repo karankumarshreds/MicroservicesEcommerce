@@ -54,7 +54,7 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
 ticketSchema.statics.findByEvent = (event: { id: string, version: number }) => {
     return Ticket.findOne({
         _id: event.id,
-        version: event.version
+        version: event.version - 1
     })
 }
 // Adding method to the document to find if the ticket is reserved or not 

@@ -1,14 +1,15 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
-
+import mongoose from 'mongoose';
 
 it('fetches a order with id', async () => {
 
     // create a ticket 
     const ticket = await Ticket.build({
         title: 'concert',
-        price: 500
+        price: 500,
+        id: mongoose.Types.ObjectId().toHexString()
     });
     await ticket.save();
     const user = global.signin();
@@ -36,7 +37,8 @@ it('Cant access other users order', async () => {
     // create a ticket 
     const ticket = await Ticket.build({
         title: 'concert',
-        price: 500
+        price: 500,
+        id: mongoose.Types.ObjectId().toHexString()
     });
     await ticket.save();
     const user1 = global.signin();
