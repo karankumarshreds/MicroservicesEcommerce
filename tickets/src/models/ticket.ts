@@ -22,6 +22,7 @@ interface TicketDoc extends mongoose.Document {
     price: number;
     userId: string;
     version: number; // because default mongoose.Document doesn't have 'version', it has '__v'
+    orderId?: string; // optional? because the initial ticket will be free with no order associated with it 
 };
 
 // ## 3
@@ -43,6 +44,9 @@ const ticketSchema = new mongoose.Schema({
     },
     userId: {
         type: String, required: true
+    },
+    orderId: {
+        type: String
     }
 }, {
     toJSON: {
