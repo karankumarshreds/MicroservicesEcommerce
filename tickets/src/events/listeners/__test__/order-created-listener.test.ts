@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import { OrderCreatedEvent, OrderStatus } from '@karantickets/common';
 
 const setup = async () => {
-    // Create an instance of a listener 
+    // Create an instance of a listener // natsWrapper.client is using mock function here
     const listener = new OrderCreatedListener(natsWrapper.client);
 
     // Create and save a ticket 
@@ -48,4 +48,11 @@ it('acks the message', async () => {
     const { listener, msg, data, ticket } = await setup();
     await listener.onMessage(data, msg);
     expect(msg.ack).toHaveBeenCalled();
+});
+
+it('publishes ticket updated event after saving the orderId on the ticket', async () => {
+    const { listener, ticket, data, msg } = await setup();
+    await listener.onMessage(data, msg);
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+
 });

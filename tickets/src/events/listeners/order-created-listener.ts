@@ -2,6 +2,7 @@ import { Listener, OrderCreatedEvent, Subjects } from '@karantickets/common';
 import { Message } from 'node-nats-streaming';
 import { queueGroupName } from './queue-group-name';
 import { Ticket } from '../../models/ticket';
+import { TicketUpdatedPublisher } from '../publishers/ticket-updated-publisher';
 
 /**
  * // Lecture #381
@@ -23,6 +24,17 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
             orderId: data.id
         });
         await ticket.save()
+        // we also need to update the run ticket updated publisher to tell
+        // the other services(specifically ticket service) to change the new version 
+        // and add in the order id because we want all the services to be in the sync
+        await new TicketUpdatedPublisher(this.client).publish({
+            id: ticket.id,
+            price: ticket.price,
+            title: ticket.title,
+            userId: ticket.userId,
+            version: ticket.version,
+            orderId: ticket.orderId
+        });
         msg.ack();
     }
 };
