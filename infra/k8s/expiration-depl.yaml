@@ -1,0 +1,35 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+    name: expiration-depl 
+spec: 
+    replicas: 1 
+    selector: 
+        matchLabels:
+            app: expiration
+    template: 
+        metadata: 
+            labels: 
+                app: expiration 
+        spec: 
+            containers: 
+                - name: expiration 
+                  image: gcr.io/ticketing-dev-281911/expiration
+                  env: 
+                    - name: NATS_CLIENT_ID
+                      ##  use same name as the running pod 
+                      valueFrom: 
+                        fieldRef: 
+                            fieldPath: metadata.name
+                    - name: NATS_URL
+                      value: 'http://nats-srv:4222'
+                    - name: NATS_CLUSTER_ID
+                      value: ticketing
+                    - name: REDIS_HOST
+                      value: expiration-redis-srv 
+
+##### NOTE #####
+## We do not need any service for this as no other service would directly
+## contact this expiration service directly. This service only will just 
+## listen for the order-created and order-cancelled events from the NATS
+## server and publish and expiration event back to the NATS server!

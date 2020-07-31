@@ -45,5 +45,13 @@ build:
           sync: 
             manual:
               - src: '**/*.j'
+                dest: .    
+        - image: gcr.io/ticketing-dev-281911/expiration 
+          context: expiration 
+          docker: 
+            dockerfile: Dockerfile
+          sync: 
+            manual:
+              - src: '**/*.j'
                 dest: .        
         
