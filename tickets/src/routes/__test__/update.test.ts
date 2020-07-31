@@ -1,9 +1,10 @@
 import request from 'supertest';
 import { app } from '../../app';
-
+import mongoose from 'mongoose';
 // even though we are importing the real natsWrapper 
 // Jest will make sure to interrupt that and import the fake one instead 
 import { natsWrapper } from '../../nats-wrapper';
+import { Ticket } from '../../models/ticket';
 
 it(('returns 404 if provided ID does not exist'), async () => {
     await request(app)
@@ -113,4 +114,30 @@ it('publishes an event after update', async () => {
         })
         .expect(200);
     expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+
+it('rejects updating if the ticket is reserved', async () => {
+    const cookie = global.signin();
+    const response = await request(app)
+        .post('/api/tickets')
+        .set('Cookie', cookie)
+        .send({
+            title: 'Title',
+            price: 500
+        });
+
+    const ticket = await Ticket.findById(response.body.id);
+    ticket!.set({
+        orderId: new mongoose.Types.ObjectId().toHexString()
+    });
+    await ticket!.save();
+
+    await request(app)
+        .put(`/api/tickets/${response.body.id}`)
+        .set('Cookie', cookie)
+        .send({
+            title: 'Title',
+            price: 600
+        })
+        .expect(400);
 });
