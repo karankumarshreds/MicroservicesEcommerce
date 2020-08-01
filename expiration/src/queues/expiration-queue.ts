@@ -28,4 +28,6 @@ const expirationQueue = new Queue<Payload>('order:expiration', {
 // which contains data and other methods with it 
 expirationQueue.process(async (job) => {
     console.log('This is the orderId: ', job.data.orderId);
-}); 
+});
+
+export { expirationQueue };
