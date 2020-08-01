@@ -12,11 +12,13 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
         // enqueue the job for bull with data and delay 
         await expirationQueue.add({
             orderId: data.id
-        }, {
-            // amount of time to wait until the job is processed 
-            // (job logic to publish event written in expiration-queue)
-            delay: delay
-        });
+        },
+            {
+                // amount of time to wait until the job is processed 
+                // (job logic to publish event written in expiration-queue)
+                delay: delay
+            }
+        );
         msg.ack();
     }
 };

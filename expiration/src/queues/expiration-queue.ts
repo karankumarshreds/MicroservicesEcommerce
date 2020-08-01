@@ -1,7 +1,10 @@
 import Queue from 'bull';
+import { ExpirationCompletePublisher } from '../events/publishers/expiration-complete-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 // Lecture #401
 
+// interface to tell what type of data will the job object handle 
 interface Payload {
     orderId: string;
 };
@@ -27,7 +30,10 @@ const expirationQueue = new Queue<Payload>('order:expiration', {
 // job is something like msg in node-nat-streaming 
 // which contains data and other methods with it 
 expirationQueue.process(async (job) => {
-    console.log('This is the orderId: ', job.data.orderId);
+    await new ExpirationCompletePublisher(natsWrapper.client).publish({
+        orderId: job.data.orderId
+    });
+    console.log('Expiration event published for order ID =  ', job.data.orderId);
 });
 
 export { expirationQueue };
