@@ -13,6 +13,11 @@ spec:
         - host: ticketing.dev 
           http: 
             paths:
+                - path: /api/payments/?(.*) 
+                  backend: 
+                    ## route this request to auth service 
+                    serviceName: payments-srv 
+                    servicePort: 3000
                 - path: /api/users/?(.*) 
                   backend: 
                     ## route this request to auth service 

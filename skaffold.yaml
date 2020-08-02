@@ -44,7 +44,7 @@ build:
             dockerfile: Dockerfile
           sync: 
             manual:
-              - src: '**/*.j'
+              - src: '**/*.ts'
                 dest: .    
         - image: gcr.io/ticketing-dev-281911/expiration 
           context: expiration 
@@ -52,6 +52,14 @@ build:
             dockerfile: Dockerfile
           sync: 
             manual:
-              - src: '**/*.j'
+              - src: '**/*.ts'
+                dest: .        
+        - image: gcr.io/ticketing-dev-281911/payments 
+          context: payments 
+          docker: 
+            dockerfile: Dockerfile
+          sync: 
+            manual:
+              - src: '**/*.ts'
                 dest: .        
         
