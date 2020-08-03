@@ -11,6 +11,7 @@ import {
     OrderStatus
 } from '@karantickets/common';
 import { Order } from '../models/order';
+import { Payment } from '../models/payment';
 
 const router = express.Router();
 
@@ -36,16 +37,30 @@ router.post('/api/payments',
         };
 
         // charge
-        await stripe.charges.create({
+        const charge = await stripe.charges.create({
             currency: 'inr',
             amount: order.price * 100, // because stripe works in least values ie (cents)
             source: token
         });
+
+        // save the payments 
+        const payment = Payment.build({
+            orderId,
+            stripeId: charge.id
+        });
+        // await payment.save();
 
         res.status(201).send({ success: true });
 
     });
 
 export { router as createChargeRouter };
+
+/**
+ * If sometime in the future you need to add a feature for the user to see
+ * list of all the payments, you can make use of the stripeId saved in the
+ * payments DB, create a new route handler which makes 'retrieve charge'
+ * with a <stripeId> to the stripe API.
+ */
 
 

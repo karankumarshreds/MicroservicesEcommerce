@@ -2,7 +2,10 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 // to make use of the mock file 
 // this will make nats-wrapper make use of this mock file instead of the real file
+
 jest.mock('../nats-wrapper');
+
+process.env.STRIPE_KEY = 'sk_test_51HBfOiAwrVXa1QJ5kqZ2drd3FZdSMSkt1hzEoclnYTrU1MOCx9dYMcVuREM0P0k1g7BdEPKlCt2YqeKA1irtO0p000oSF8rgcv';
 
 /************************************************************
  * MongoMemoryServer is going to run an instance of mongodb
