@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 jest.mock('../nats-wrapper');
 
-process.env.STRIPE_KEY = 'sk_test_51HBfOiAwrVXa1QJ5kqZ2drd3FZdSMSkt1hzEoclnYTrU1MOCx9dYMcVuREM0P0k1g7BdEPKlCt2YqeKA1irtO0p000oSF8rgcv';
+process.env.STRIPE_KEY = '';
 
 /************************************************************
  * MongoMemoryServer is going to run an instance of mongodb
