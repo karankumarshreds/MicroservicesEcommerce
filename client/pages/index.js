@@ -1,5 +1,3 @@
-import buildClient from '../api/buildClient';
-
 const LandingPage = ({ currentUser }) => {
     return (
         <div>
@@ -12,10 +10,11 @@ const LandingPage = ({ currentUser }) => {
 };
 
 LandingPage.getInitialProps = async (context) => {
-    // instance of buildClient (re-configured-axios-function)
-    const client = buildClient(context);
-    const { data } = await client.get('/api/users/currentuser');
-    return data;
+    // // instance of buildClient (re-configured-axios-function)
+    // const client = buildClient(context);
+    // const { data } = await client.get('/api/users/currentuser');
+    // return data;
+    return {};
 }
 
 export default LandingPage;

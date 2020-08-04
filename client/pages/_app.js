@@ -6,7 +6,7 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
     return (
         <div>
             <Header currentUser={currentUser} />
-            <Component {...pageProps} />
+            <Component {...pageProps} currentUser={currentUser} />
         </div>
 
     )
@@ -14,15 +14,15 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
 
 AppComponent.getInitialProps = async (appContext) => {
 
-    // this custom app component (inbuilt) have context inside of props as "ctx"
+    // this custom app component (inbuilt) has context inside of props as "ctx"
     const client = buildClient(appContext.ctx);
     // current user info needs to be passed around hence called here
     const { data } = await client.get('/api/users/currentuser');
     // page Components expect a context with (req, res) properties which is appContext.ctx 
-    let pageProps;
-    // invoke pages gips() only if exist // passed down to page props
+    let pageProps = {};
+    // invoke pages gips() only if exist // passed down to pages as pageProps
     if (appContext.Component.getInitialProps) {
-        pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+        pageProps = await appContext.Component.getInitialProps(appContext.ctx, data);
     }
     // recieved above by AppComponent's props and further passed down
     return {

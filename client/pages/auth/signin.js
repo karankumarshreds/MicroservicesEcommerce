@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Router from 'next/router';
 import useRequest from '../../hooks/use-request';
+import { withAuth } from '../../hooks/with-auth';
 
-export default () => {
+const Signin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { doRequest, errors } = useRequest({
@@ -44,3 +45,9 @@ export default () => {
         </form>
     );
 }
+
+Signin.getInitialProps = async (context, currentUser) => {
+    return {}
+}
+
+export default withAuth(Signin);
