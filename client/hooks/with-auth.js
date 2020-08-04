@@ -1,10 +1,10 @@
 import React from 'react';
 import redirect from './redirect';
 
-export const withAuth = (Component) => {
+const withAuth = (Component) => {
     return class AuthComponent extends React.Component {
         static async getInitialProps(ctx, { currentUser }) {
-            if (currentUser) {
+            if (!currentUser) {
                 return redirect(ctx, "/");
             }
         }
@@ -12,5 +12,6 @@ export const withAuth = (Component) => {
             return <Component {...this.props} />
         }
     }
-
 }
+
+export default withAuth;

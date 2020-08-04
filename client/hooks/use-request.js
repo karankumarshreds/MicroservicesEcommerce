@@ -9,10 +9,11 @@ export default ({ url, method, body, onSuccess }) => {
             setErrors(null); // clear old errors
             const res = await axios[method](url, body);
             if (onSuccess) {
-                onSuccess();
+                onSuccess(res.data);
             }
             return res.data;
         } catch (err) {
+            console.log(err, 'WAHT AE TE ERRORS ?')
             setErrors(
                 <div className="alert alert-danger">
                     <h4>Oops...</h4>

@@ -17,7 +17,6 @@ export default () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        Router.push('/');
         doRequest();
     };
 

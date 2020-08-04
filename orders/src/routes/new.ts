@@ -39,7 +39,7 @@ router.post('/api/orders',
 
         // Calculate an expiration date for this order and set it to present time + 15 mins
         const expiration = new Date();
-        expiration.setSeconds(expiration.getSeconds() + (15 * 60));
+        expiration.setSeconds(expiration.getSeconds() + (1 * 60));
 
         // Build the order and save to the database 
         const order = Order.build({

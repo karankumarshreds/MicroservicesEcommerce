@@ -6,7 +6,9 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
     return (
         <div>
             <Header currentUser={currentUser} />
-            <Component {...pageProps} currentUser={currentUser} />
+            <div className="container">
+                <Component {...pageProps} currentUser={currentUser} />
+            </div>
         </div>
 
     )
@@ -22,7 +24,7 @@ AppComponent.getInitialProps = async (appContext) => {
     let pageProps = {};
     // invoke pages gips() only if exist // passed down to pages as pageProps
     if (appContext.Component.getInitialProps) {
-        pageProps = await appContext.Component.getInitialProps(appContext.ctx, data);
+        pageProps = await appContext.Component.getInitialProps(appContext.ctx, data, client);
     }
     // recieved above by AppComponent's props and further passed down
     return {

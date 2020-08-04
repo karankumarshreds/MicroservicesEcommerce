@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Router from 'next/router';
 import useRequest from '../../hooks/use-request';
-import { withAuth } from '../../hooks/with-auth';
+import { withoutAuth } from '../../hooks/without-auth';
 
 const Signin = () => {
     const [email, setEmail] = useState('');
@@ -50,4 +50,4 @@ Signin.getInitialProps = async (context, currentUser) => {
     return {}
 }
 
-export default withAuth(Signin);
+export default withoutAuth(Signin);
