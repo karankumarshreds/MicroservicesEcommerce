@@ -13,6 +13,7 @@ npm run dev
 npm install react react-dom next
 npm install bootstrap
 npm install axios
+npm install react-stripe-checkout
 ```
 
 ### nextJS pages?
